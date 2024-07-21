@@ -1,24 +1,25 @@
-import Link from "next/link";
+"use client";
 
-import { CreatePost } from "@/app/_components/create-post";
-import { api } from "@/trpc/server";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 export default async function Home() {
-  return <main></main>;
-}
+  const { register } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-async function CrudShowcase() {
-  const latestPost = await api.post.getLatest();
+  const [showPassword, hidePassword] = useState<boolean>(false);
 
   return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreatePost />
-    </div>
+    <main className="flex h-full w-full items-center justify-center space-y-2">
+      <input type="text" {...register("email")} />
+      <input
+        type={showPassword ? "text" : "password"}
+        {...register("password")}
+      />
+    </main>
   );
 }
